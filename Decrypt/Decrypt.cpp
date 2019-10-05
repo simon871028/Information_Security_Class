@@ -146,11 +146,11 @@ void rail_fence(string cipher, int key)
 	p.clear();
 }
 
-int main()
+int main(int argc , char *argv[])
 {
-	string ciphertext, method, key;
+	string ciphertext = argv[3], method = argv[1], key=argv[2];
 
-	cin >> method >> key >> ciphertext;
+	//cin >> method >> key >> ciphertext;
 
 	if (method == "caesar")
 	{
