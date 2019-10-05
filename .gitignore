@@ -13,9 +13,7 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 # Build results
-[Dd]ebug/
-![Dd]ebug/Decrypt.exe
-![Dd]ebug/Encrypt.exe
+
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
@@ -339,3 +337,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+*.enc
+*.tlog
+*.idb
