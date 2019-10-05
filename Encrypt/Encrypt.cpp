@@ -1,4 +1,4 @@
-#include<iostream>
+ï»¿#include<iostream>
 #include<iomanip>
 #include<string>
 #include<algorithm>
@@ -19,10 +19,56 @@ string caesar(string plain, int key)
 	}
 	return plain;
 }
-/*string playfair(string plain, string key)
-{
 
-}*/
+void playfair(string plain, string key)
+{
+	int c_size = plain.length(), k_size = key.length(), index = 0;
+	int in_key[26];
+	for (int i = 0; i < 26; i++)
+		in_key[i] = -1;
+
+	char arr[5][5] = { 0 };
+	for (int i = 0; i < k_size; i++)
+		key[i] = (char)tolower(key[i]);
+	for (int i = 0; i < c_size; i++)
+		if (plain[i] == 'j')
+			plain[i] = 'i';
+	for (int i = 0; i < k_size; i++)
+		if (key[i] == 'j')
+			key[i] = 'i';
+	in_key['j' - 'a'] = 1;
+
+	for (int i = 0; i < k_size; i++)
+	{
+		if (in_key[key[i] - 'a'] == -1)
+		{
+			in_key[key[i] - 'a'] = index;
+			arr[index / 5][index % 5] = key[i];
+			if (++index == 26) break;
+		}
+	}
+	for (int i = 0; i < 26 && index < 26; i++)
+	{
+		if (in_key[i] == -1)
+		{
+			in_key[i] = index;
+			arr[index / 5][index % 5] = i + 'a';
+			index++;
+		}
+	}
+	for (int i = 0; i < c_size; i += 2)
+	{
+		char first = plain[i], second = plain[i + 1];
+		int f_key = in_key[first - 'a'], s_key = in_key[second - 'a'];
+
+		if (f_key / 5 == s_key / 5)
+			cout << (char)toupper(arr[f_key / 5][(f_key + 6) % 5]) << (char)toupper(arr[f_key / 5][(s_key + 6) % 5]);
+		else if (f_key % 5 == s_key % 5)
+			cout << (char)toupper(arr[((f_key / 5) + 6) % 5][f_key % 5]) << (char)toupper(arr[((s_key / 5) + 6) % 5][f_key % 5]);
+		else
+			cout << (char)toupper(arr[f_key / 5][s_key % 5]) << (char)toupper(arr[s_key / 5][f_key % 5]);
+	}
+}
 void vernam(string plain, string key)
 {
 	while (plain.length() > key.length())
@@ -50,13 +96,13 @@ void row(string plain, string key)
 	char** table = new char* [size];
 	for (int i = 0; i < size; ++i)
 		table[i] = new char[plain.length() / size + 1];
-	//³Ðarray
+	//Â³Ãarray
 	for (int j = 0; j < (plain.length() / size + 1); j++)
 		for (int i = 0; i < size; i++)
 			table[i][j] = 0;
 
 
-	//¶ñ¤Jplaintext
+	//Â¶Ã±Â¤Jplaintext
 	int index = 0;
 	for (int j = 0; j < (plain.length() / size + 1); j++)
 		for (int i = 0; i < size; i++)
@@ -118,41 +164,29 @@ string rail(string text, int key)
 	delete[] rail;
 	return result;
 }
-int main()
+int main(int argc, char* argv[])
 {
-	string plaintext, method;
-
-	cin >> method;
+	string plaintext = argv[3], method = argv[1], key = argv[2];
+	//cin >> method;
 
 	if (method == "caesar")
 	{
-		int key = 0;
-		cin >> key >> plaintext;
-		cout << caesar(plaintext, key);
+		cout << caesar(plaintext, atoi(key.c_str()));
 	}
-	/*else if (method == "playfair")
+	else if (method == "playfair")
 	{
-		string key = "";
-		cin >> plaintext >> key;
-		cout << playfair(plaintext, key);
-	}*/
+		playfair(plaintext, key);
+	}
 	else if (method == "vernam")
 	{
-		string key;
-		cin >> key >> plaintext;
 		vernam(plaintext, key);
 	}
 	else if (method == "row")
 	{
-		string key;
-		cin >> key >> plaintext;
 		row(plaintext, key);
 	}
 	else if (method == "rail_fence")
 	{
-		int key;
-		cin >> key >> plaintext;
-		cout << rail(plaintext, key);
+		cout << rail(plaintext, atoi(key.c_str()));
 	}
-	system("pause");
 }
