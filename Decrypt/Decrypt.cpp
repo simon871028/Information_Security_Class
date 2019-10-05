@@ -21,6 +21,53 @@ void caesar(string cipher, int key)
 
 void playfair(string cipher, string key)
 {
+	int c_size = cipher.length(), k_size = key.length(), index = 0;
+	int in_key[26];
+	for (int i = 0; i < 26; i++)
+		in_key[i] = -1;
+
+	char arr[5][5] = { 0 };
+
+	for (int i = 0; i < c_size; i++)
+		if (cipher[i] == 'J')
+			cipher[i] = 'I';
+	for (int i = 0; i < k_size; i++)
+		if (key[i] == 'J')
+			key[i] = 'I';
+	in_key['J' - 'A'] = 1;
+
+	for (int i = 0; i < k_size; i++)
+	{
+		if (in_key[key[i] - 'A'] == -1)
+		{
+			in_key[key[i] - 'A'] = index;
+			arr[index / 5][index % 5] = key[i];
+			if (++index == 26) break;
+		}
+	}
+
+	for (int i = 0; i < 26 && index < 26; i++)
+	{
+		if (in_key[i] == -1)
+		{
+			in_key[i] = index;
+			arr[index / 5][index % 5] = i + 'A';
+			index++;
+		}
+	}
+
+	for (int i = 0; i < c_size; i += 2)
+	{
+		char first = cipher[i], second = cipher[i + 1];
+		int f_key = in_key[first - 'A'], s_key = in_key[second - 'A'];
+
+		if (f_key / 5 == s_key / 5)
+			cout << arr[f_key / 5][(f_key + 4) % 5] << arr[f_key / 5][(s_key + 4) % 5];
+		else if (f_key % 5 == s_key % 5)
+			cout << arr[((f_key / 5) + 4) % 5][f_key % 5] << arr[((s_key / 5) + 4) % 5][f_key % 5];
+		else
+			cout << arr[f_key / 5][s_key % 5] << arr[s_key / 5][f_key % 5];
+	}
 
 }
 
