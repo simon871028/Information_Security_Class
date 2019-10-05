@@ -62,11 +62,11 @@ void playfair(string cipher, string key)
 		int f_key = in_key[first - 'A'], s_key = in_key[second - 'A'];
 
 		if (f_key / 5 == s_key / 5)
-			cout << tolower(arr[f_key / 5][(f_key + 4) % 5]) << tolower(arr[f_key / 5][(s_key + 4) % 5]);
+			cout << (char)tolower(arr[f_key / 5][(f_key + 4) % 5]) << (char)tolower(arr[f_key / 5][(s_key + 4) % 5]);
 		else if (f_key % 5 == s_key % 5)
-			cout << tolower(arr[((f_key / 5) + 4) % 5][f_key % 5]) << tolower(arr[((s_key / 5) + 4) % 5][f_key % 5]);
+			cout << (char)tolower(arr[((f_key / 5) + 4) % 5][f_key % 5]) << (char)tolower(arr[((s_key / 5) + 4) % 5][f_key % 5]);
 		else
-			cout << tolower(arr[f_key / 5][s_key % 5]) << tolower(arr[s_key / 5][f_key % 5]);
+			cout << (char)tolower(arr[f_key / 5][s_key % 5]) << (char)tolower(arr[s_key / 5][f_key % 5]);
 	}
 
 }
