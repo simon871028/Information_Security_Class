@@ -117,7 +117,7 @@ int P[] = { 16,  7, 20, 21,
 	 22, 11,  4, 25 };
 
 
-int main()
+int main(int argc, char* argv[])
 {
 	map<char, string> data;
 	char* change = new char[16]{ '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
@@ -149,17 +149,14 @@ int main()
 	r_data["0111"] = '7';
 	r_data["1000"] = '8';
 	r_data["1001"] = '9';
-	r_data["1010"] = 'A';
-	r_data["1011"] = 'B';
-	r_data["1100"] = 'C';
-	r_data["1101"] = 'D';
-	r_data["1110"] = 'E';
-	r_data["1111"] = 'F';
+	r_data["1010"] = 'a';
+	r_data["1011"] = 'b';
+	r_data["1100"] = 'c';
+	r_data["1101"] = 'd';
+	r_data["1110"] = 'e';
+	r_data["1111"] = 'f';
 
-	string input, key;
-
-
-	cin >> key >> input;
+	string input = argv[2], key = argv[1];
 	string b_input, b_key;
 
 	for (int i = 2; i < 16 + 2; i++)
@@ -231,7 +228,6 @@ int main()
 	cout << "0x";
 	for (int i = 0; i < 64; i += 4)
 		cout << r_data.find(result.substr(i, 4))->second;
-	cout << endl << "0x" << result;
 
 
 	return 0;
