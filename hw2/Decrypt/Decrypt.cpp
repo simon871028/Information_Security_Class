@@ -119,8 +119,9 @@ int P[] = { 16,  7, 20, 21,
 
 int main(int argc, char* argv[])
 {
-	map<char, string> data;
 	char* change = new char[16]{ '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
+	
+	map<char, string> data;
 	data['0'] = "0000";
 	data['1'] = "0001";
 	data['2'] = "0010";
@@ -165,15 +166,14 @@ int main(int argc, char* argv[])
 		b_key += data.find(key[i])->second;
 	}
 
-	string new_input;
 	string left = ""
 		, right = "";
 	for (int i = 0; i < 64; i++)
 	{
-		new_input += b_input[IP[i] - 1];
 		if (i < 32) left += b_input[IP[i] - 1];
 		else right += b_input[IP[i] - 1];
 	}
+
 	string pc_1key;
 	for (int i = 0; i < 56; i++)
 		pc_1key += b_key[PC_1[i] - 1];
