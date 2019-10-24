@@ -204,16 +204,19 @@ int main(int argc, char* argv[])
 		string _xor;
 		for (int i = 0; i < 48; i++)
 			_xor += (new_right[i] ^ pc_2key[i]) + '0';
+
 		string s_result, new_s_result;
 		for (int i = 0; i < 48; i += 6)
 		{
 			int row = (_xor[i + 0] - '0') * 2 + (_xor[i + 5] - '0');
-			int column = (_xor[i + 1] - '0') * 8 + (_xor[i + 2] - '0') * 4 + (_xor[i + 3] - '0') * 2 + (_xor[i + 4] - '0');
+			int column = (_xor[i + 1] - '0') * 8 + (_xor[i + 2] - '0') * 4 +
+				(_xor[i + 3] - '0') * 2 + (_xor[i + 4] - '0');
 			s_result += data.find(change[S_BOX[i / 6][row * 16 + column]])->second;
 		}
 
 		for (int i = 0; i < 32; i++)
 			new_s_result += s_result[P[i] - 1];
+
 		string tmp_right = right.substr(0, 32);
 		right = "";
 		for (int i = 0; i < 32; i++)
