@@ -1,18 +1,20 @@
 import sys
 import io
+import base64
 from PIL import Image
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
+from Crypto import Random
 
 data = sys.argv
-
 if data[1] == "ECB":
     mode = AES.MODE_ECB
 elif data[1] == "CBC":
     mode = AES.MODE_CBC
 
-key = data[3]
-BLOCK_SIZE = 32
+key = input('key : ')
+key = bytes.fromhex(key)
+BLOCK_SIZE = 16
 
 
 # jpg,png to ppm
@@ -23,7 +25,7 @@ encrypt_data = pad(ppm_byte,BLOCK_SIZE)
 
 index = 0
 cipher = AES.new(key, mode)
-plaintext = ""
+plaintext = b''
 data_len = len(encrypt_data)
 while index < data_len:
     plaintext +=  cipher.decrypt(encrypt_data[index:index  + BLOCK_SIZE])
