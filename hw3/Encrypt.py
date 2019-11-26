@@ -46,30 +46,26 @@ def iv_generator():
 
 data = sys.argv
 
-mode = AES.MODE_ECB
-if data[1] == "ECB":
-    mode = AES.MODE_ECB
-elif data[1] == "CBC":
-    mode = AES.MODE_CBC
+mode = data[1]
 
 
 key = key_generator()
 iv= iv_generator()
-# jpg,png to ppm
-o_ppmFile = "./original_pic.ppm"
+
 o_image = Image.open(data[2])
 
 ppm_byte = o_image.convert("RGB").tobytes()
 
 encrypt_data = pad(ppm_byte,BLOCK_SIZE)
-if mode == AES.MODE_ECB :
+if mode == "ECB" :
     ciphertext = AES_ECB(encrypt_data,key)
-    image = Image.frombytes("RGB", o_image.size ,ciphertext)
-    image.save('./encryptECB.png','png')
-elif mode == AES.MODE_CBC:
+elif mode == "CBC":
     ciphertext = AES_CBC(encrypt_data,key,iv)
-    image = Image.frombytes("RGB", o_image.size ,ciphertext)
-    image.save('./encryptCBC.png','png')
+elif mode == "NEW":
+    ciphertext = AES_CBC(encrypt_data,key,iv)
+
+image = Image.frombytes("RGB", o_image.size ,ciphertext)
+image.save('./encrypt'+mode+'.png','png')
 
 print('KEY : ' + key.hex())
 if mode == AES.MODE_CBC:

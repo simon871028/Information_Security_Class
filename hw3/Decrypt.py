@@ -9,12 +9,12 @@ from Crypto import Random
 data = sys.argv
 mode = AES.MODE_ECB
 iv = ''
-if data[1] == "ECB":
-    mode = AES.MODE_ECB
-elif data[1] == "CBC":
-    mode = AES.MODE_CBC
+mode = "ECB"
+if data[1] == "CBC" or data[1] == "NEW":
+    mode = data[1]
     iv = input('IV :' )
     iv = bytes.fromhex(iv)
+
 
 key = input('key : ')
 key = bytes.fromhex(key)
@@ -46,16 +46,15 @@ def AES_CBC(decrypt_data,key,iv):
         index += BLOCK_SIZE
     return plaintext
 # jpg,png to ppm
-o_ppmFile = "./original_pic.ppm"
 o_image = Image.open(data[2])
 ppm_byte = o_image.convert("RGB").tobytes()
 decrypt_data = pad(ppm_byte,BLOCK_SIZE)
 
-if mode == AES.MODE_ECB :
+if mode == "ECB" :
     plaintext = AES_ECB(decrypt_data,key)
     image = Image.frombytes("RGB", o_image.size ,plaintext)
     image.save('./decryptECB.png','png')
-elif mode == AES.MODE_CBC:
+elif mode == "CBC":
     plaintext = AES_CBC(decrypt_data,key,iv)
     image = Image.frombytes("RGB", o_image.size ,plaintext) 
     image.save('./decryptCBC.png','png')
