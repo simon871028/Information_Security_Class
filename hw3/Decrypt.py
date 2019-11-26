@@ -45,6 +45,22 @@ def AES_CBC(decrypt_data,key,iv):
         plaintext += plain
         index += BLOCK_SIZE
     return plaintext
+
+def AES_NEW(decrypt_data,key,iv):
+    cipher = AES.new(key, AES.MODE_ECB)
+    index = 0
+    plaintext = b''
+    iv_copy_plain = iv
+    iv_copy_cipher = iv
+    data_len = len(decrypt_data)
+    while index < data_len:
+        data = self_xor(iv_copy_cipher,decrypt_data[index : index + BLOCK_SIZE])
+        iv_copy_cipher = decrypt_data[index : index + BLOCK_SIZE]
+        data = cipher.decrypt(data)
+        plaintext += self_xor(iv_copy_plain,data)
+        iv_copy_plain = data
+        index += BLOCK_SIZE
+    return plaintext
 # jpg,png to ppm
 o_image = Image.open(data[2])
 ppm_byte = o_image.convert("RGB").tobytes()
@@ -52,13 +68,13 @@ decrypt_data = pad(ppm_byte,BLOCK_SIZE)
 
 if mode == "ECB" :
     plaintext = AES_ECB(decrypt_data,key)
-    image = Image.frombytes("RGB", o_image.size ,plaintext)
-    image.save('./decryptECB.png','png')
 elif mode == "CBC":
     plaintext = AES_CBC(decrypt_data,key,iv)
-    image = Image.frombytes("RGB", o_image.size ,plaintext) 
-    image.save('./decryptCBC.png','png')
+elif mode == "NEW":
+    plaintext = AES_NEW(decrypt_data,key,iv)
 
+image = Image.frombytes("RGB", o_image.size ,plaintext)
+image.save('./decrypt'+mode+'.png','png')
 
 
 
