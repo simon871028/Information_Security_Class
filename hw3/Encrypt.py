@@ -36,6 +36,21 @@ def AES_CBC(encrypt_data,key,iv):
         index += BLOCK_SIZE
     return ciphertext
 
+def AES_NEW(encrypt_data,key,iv):
+    cipher = AES.new(key, AES.MODE_ECB)
+    index = 0
+    ciphertext = b''
+    iv_copy_plain = iv
+    iv_copy_cipher = iv
+    data_len = len(encrypt_data)
+    while index < data_len:
+        iv_copy_plain = self_xor(iv_copy_plain,encrypt_data[index:index + BLOCK_SIZE])
+        data = cipher.encrypt(iv_copy_plain)
+        iv_copy_cipher = self_xor(iv_copy_cipher,data)
+        ciphertext += iv_copy_cipher
+        index += BLOCK_SIZE
+    return ciphertext
+
 def key_generator():
     random = Random.new()
     return base64.b64encode(random.read(BLOCK_SIZE))
@@ -62,13 +77,13 @@ if mode == "ECB" :
 elif mode == "CBC":
     ciphertext = AES_CBC(encrypt_data,key,iv)
 elif mode == "NEW":
-    ciphertext = AES_CBC(encrypt_data,key,iv)
+    ciphertext = AES_NEW(encrypt_data,key,iv)
 
 image = Image.frombytes("RGB", o_image.size ,ciphertext)
 image.save('./encrypt'+mode+'.png','png')
 
 print('KEY : ' + key.hex())
-if mode == AES.MODE_CBC:
+if mode != "ECB":
     print('IV : ' + iv.hex())
 
 
