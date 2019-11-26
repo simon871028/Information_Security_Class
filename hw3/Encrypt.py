@@ -65,11 +65,11 @@ encrypt_data = pad(ppm_byte,BLOCK_SIZE)
 if mode == AES.MODE_ECB :
     ciphertext = AES_ECB(encrypt_data,key)
     image = Image.frombytes("RGB", o_image.size ,ciphertext)
-    image.save('./result/encryptECB.png','png')
+    image.save('./encryptECB.png','png')
 elif mode == AES.MODE_CBC:
     ciphertext = AES_CBC(encrypt_data,key,iv)
     image = Image.frombytes("RGB", o_image.size ,ciphertext)
-    image.save('./result/encryptCBC.png','png')
+    image.save('./encryptCBC.png','png')
 
 print('KEY : ' + key.hex())
 if mode == AES.MODE_CBC:

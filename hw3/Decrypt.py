@@ -8,6 +8,7 @@ from Crypto import Random
 
 data = sys.argv
 mode = AES.MODE_ECB
+iv = ''
 if data[1] == "ECB":
     mode = AES.MODE_ECB
 elif data[1] == "CBC":
@@ -53,11 +54,11 @@ decrypt_data = pad(ppm_byte,BLOCK_SIZE)
 if mode == AES.MODE_ECB :
     plaintext = AES_ECB(decrypt_data,key)
     image = Image.frombytes("RGB", o_image.size ,plaintext)
-    image.save('./result/decryptECB.png','png')
+    image.save('./decryptECB.png','png')
 elif mode == AES.MODE_CBC:
     plaintext = AES_CBC(decrypt_data,key,iv)
     image = Image.frombytes("RGB", o_image.size ,plaintext) 
-    image.save('./result/decryptCBC.png','png')
+    image.save('./decryptCBC.png','png')
 
 
 
