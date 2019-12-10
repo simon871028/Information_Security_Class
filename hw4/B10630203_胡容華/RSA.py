@@ -14,7 +14,7 @@ def getKM(data):
     m = data - 1
     k = 0
     while m % 2 == 0:
-        k += 1
+        k += 1 
         m //= 2
     return (k,m) 
 
