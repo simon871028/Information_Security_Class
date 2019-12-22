@@ -34,6 +34,11 @@ def self_or(x,y):
             _str += '0'
     return _str
 
+def sha(data):
+    s = hashlib.sha1()
+    s.update(data)
+    return int(binascii.hexlify(s.digest()),16)
+
 def getKM(data):
     m = data - 1
     k = 0
@@ -42,30 +47,16 @@ def getKM(data):
         m //= 2
     return (k,m) 
 
-def squareAndMultiply(x,H,n = -1):
-    y = 1
-    H = bin(H)[2:]
-    for i in H:
-        y = y * y
-        if n != (-1):
-            y = y % n
-        if i == '1':
-            y = y * x
-            if n != (-1):
-                y = y % n
-        
-    return y
-
 def millerRabinsTest(data):
     k , m = getKM(data)
 
     for index in range(0,5):
         a = random.randint(2,data - 2)
-        b = squareAndMultiply(a,m,data)
+        b = pow(a,m,data)
         if b != data - 1 and b != 1:
             i = 1
             while i < k and b != data -1:
-                b = squareAndMultiply(b,2,data)
+                b = pow(b,2,data)
                 if b == 1 : 
                     return False
                 i = i + 1
@@ -88,15 +79,10 @@ def get_pq():
             seed += '1'
             g = len(seed)
 
-            s = hashlib.sha1()
-            s.update(seed)
-            u1 = bin(int(binascii.hexlify(s.digest()),16))[2:]
-
-            s = hashlib.sha1()
-            s.update(str((int(seed,2) + 1) % squareAndMultiply(2,g)))
-            u2 = bin(int(binascii.hexlify(s.digest()),16))[2:]
+            u1 = bin(sha(seed))[2:]
+            u2 = bin(sha(str((int(seed,2) + 1) % pow(2,g))))[2:]
             U = int(self_xor(u1,u2),2)
-            q = int(self_or(U ,(squareAndMultiply(2,159) + 1)),2)
+            q = int(self_or(U ,(pow(2,159) + 1)),2)
             check = millerRabinsTest(q)
            
 
@@ -108,23 +94,20 @@ def get_pq():
             i = 0
             v = []
             for k in range(0,n+1):
-                s = hashlib.sha1()
-                s.update(str((int(seed,2) + offset + k) % squareAndMultiply(2,g)))
-                v.append(int(binascii.hexlify(s.digest()),16))
+                v.append(sha(str((int(seed,2) + offset + k) % pow(2,g))))
             for _v in v:
                 if i != n:
-                    w += _v * squareAndMultiply(2,i*160)
+                    w += _v * pow(2,i*160)
                 else:
-                    w += (_v % squareAndMultiply(2,b)) * squareAndMultiply(2,i*160)
+                    w += (_v % pow(2,b)) * pow(2,i*160)
                 i += 1 
 
-            x = w + squareAndMultiply(2,L-1)
+            x = w + pow(2,L-1)
             c = x % (2*q)
             p = x - (c-1)
-            if  p >= squareAndMultiply(2,L-1):
+            if  p >= pow(2,L-1):
                 if millerRabinsTest(p):
                     return p,q
-            print(counter)
             counter = counter + 1
             offset = offset + n + 1
 
@@ -132,9 +115,9 @@ def get_abd(p,q):
     a = 1
     while a == 1:
         h = random.randrange(2,p-2)
-        a = squareAndMultiply(h,(p-1)/q , p)
+        a = pow(h,(p-1)/q , p)
     d = random.randrange(0,q)
-    b = squareAndMultiply(a,d,p)
+    b = pow(a,d,p)
     return a,b,d
 
 def read_public():
